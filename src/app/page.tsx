@@ -1,7 +1,6 @@
 // src/app/page.tsx
-import dynamic from "next/dynamic";
-
-const ChatBox = dynamic(() => import("@/components/ChatBox"), { ssr: false });
+"use client";
+import ChatBox from "@/components/ChatBox";
 
 export default function Home() {
   return (
