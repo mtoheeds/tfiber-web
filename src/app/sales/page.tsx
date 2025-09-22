@@ -1,29 +1,29 @@
 // src/app/sales/page.tsx
-import { pitch, playbook } from "@/lib/salesContent";
+"use client";
+import { useSales } from "@/hooks/useSales";
 
 export default function SalesPage() {
+  const { data, loading, err } = useSales();
+
+  if (loading) return <main className="p-6">Loading…</main>;
+  if (err || !data) return <main className="p-6">Error: {err}</main>;
+
   return (
-    <main className="mx-auto max-w-3xl p-6 space-y-6">
-      <h1 className="text-2xl font-bold">T-Fiber Sales Pitch & Tactical Cards</h1>
+    <main className="prose max-w-3xl p-6">
+      <h1>Door Pitch</h1>
+      <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
+        {data.pitch}
+      </pre>
 
-      <section className="space-y-2">
-        <h2 className="text-xl font-semibold">Door Pitch</h2>
-        <pre className="whitespace-pre-wrap rounded border p-4 text-sm bg-white">
-          {pitch}
-        </pre>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Tactical Cards</h2>
-        <div className="space-y-4">
-          {playbook.map((card, idx) => (
-            <div key={idx} className="rounded border p-4 bg-white">
-              <h3 className="font-semibold">{card.title}</h3>
-              <pre className="whitespace-pre-wrap text-sm mt-2">{card.body}</pre>
-            </div>
-          ))}
-        </div>
-      </section>
+      <h2>Playbook Cards</h2>
+      <ol>
+        {data.playbook.map((c) => (
+          <li key={c.title}>
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </li>
+        ))}
+      </ol>
     </main>
   );
 }
