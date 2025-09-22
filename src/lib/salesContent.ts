@@ -1,110 +1,123 @@
-// src/lib/salesContent.ts
+export type SalesNote = {
+  tag?: string;
+  region?: string | null;
+  title: string;
+  body: string;
+};
 
-export const pitch = `
-Hi, there! How are you doing?! *pause* Yeah finally the heat has calmed down a bit and
-corporate sent us door knocking. My name is *____* and I’m here behalf of T-Fiber. My
-company just spent around 18 million doing a lot of construction recently, did you
-happen to see any of it? *pause*
-IF Yes: Then; Yeah 100% so that was T-Fiber and we were laying out down Fiber optic
-infrastructure. Are you familiar with fiber optic internet?
+export const salesContent: SalesNote[] = [
+  {
+    title: "Door Pitch",
+    body: `Hi, there! How are you doing?! *pause* Yeah finally the heat has calmed down a bit and corporate sent us door knocking. My name is ____ and I’m here on behalf of T-Fiber. My company just spent around 18 million doing a lot of construction recently, did you happen to see any of it? *pause*
+    
+IF Yes: Then; Yeah 100% so that was T-Fiber and we were laying out down Fiber optic infrastructure. Are you familiar with fiber optic internet?
 IF No: Then; No worries – Are you familiar with fiber optic internet?
-*This is fishing* (you are learning about the customer, based on what you find here you
-will know which levers to pull to close the deal)
-IF Yes; then; Perfect as you know Fiber optic is the next generation of internet
-technology and it has a lot great advancements.
-IF No; then; No worries – just to let you know Fiber optic is the next generation of
-internet technology, and it has a lot of great advancements compared to the old copper
-based coaxial cables that our competitors use.
 
-I have been talking to a lot of your neighbor like *__insert names of customers from the
-neighborhood__* and majority of them are using spectrum, and spectrum is one of our
-competitors that uses the old copper based (use air quotes while saying shared
-infrastructure) shared infrastructure that I was mentioning. Share infrastructure is kind of
-like that tree (Point at a tree) where there is 1 cable coming into a neighborhood and all
-the houses are leeching off the same cable. So around 4-6 o’clock when all the
-neighbors are coming home from work and kids are back from school and are playing
-video games, I’m sure you noticed internet slows down that’s because everyone is
-using the same cable. On top of that those lines have been there for the last 50 or more
-years, so they have detreated over time and to make a bad situation worse because
-copper has metallic property every time it’s thundering and the positive and negative
-charges react with those copper lines which is another advantage of fiber as it’s a glass-
-based cable.
-Now talking to all neighbors I have been finding 2 main pain points, 1 is introductory
-rate, 2 is spinning wheel that is the death of joy while you are on Netflix, hulu or
-youtube.
-I’m assuming you have spectrum.
-IF Yes: Then; And how much are you paying?
-Find pricing: then; what kind of speeds do you get with that (you’d want to guess here to
-build your image as the expert)
+*This is fishing* (you are learning about the customer, based on what you find here you will know which levers to pull to close the deal)
 
-Company Internet Speed Price in Promo Price outside of
+IF Yes; then; Perfect as you know Fiber optic is the next generation of internet technology and it has a lot great advancements.
+IF No; then; No worries – just to let you know Fiber optic is the next generation of internet technology, and it has a lot of great advancements compared to the old copper based coaxial cables that our competitors use.
 
-Promo
-Spectrum 100 MB/s $30 $50-$54
-Spectrum 500/600 MB/s
-(Ultra)
+I have been talking to a lot of your neighbor like __insert names__ and majority of them are using Spectrum, and Spectrum is one of our competitors that uses the old copper based “shared infrastructure”. Shared infrastructure is kind of like that tree (point at a tree) where there is 1 cable coming into a neighborhood and all the houses are leeching off the same cable. So around 4–6 o’clock when all the neighbors are home and kids are on games, internet slows down because everyone is using the same cable. On top of that those lines have been there for 50+ years, and because copper has metallic properties every time it’s thundering the positive and negative charges react with those lines. Fiber, being glass, doesn’t have that problem.
 
-$50 $82-86
-Spectrum 1 Gig $70 $94-$114
-Ripple 500 MB/s $50 $73
-Ripple 1 Gig $85 $85
-Ripple 2 Gig $105 $105
-*Some customers don’t like to share their billing cost – take educated guess to
-determine which plan they would have*
-**Then here come the trial close**
-Best part about fiber is that it allows for bisymmetrical speed meaning your download
-and upload speeds will be the same, and even better part is the cost of transmitting
-internet broadband over fiber optic lines is lower compared to copper based coaxial
-lines. Now what this means for you is that your bill will be lowered and your experience
-on facebook, Instagram, Netflix YouTube will be improved.
-Now a lot of the neighbors are getting installed *choose a date that you signed up last
-customer* would that date work for you?
-IF Yes: Then; Put in the order.
-IF No: Then; Yeah, I can understand the hesitation and today all we are doing is
-choosing an installation date so you can take us on a free spin; I would be stupid to
-come up to your doorstep and tell you decide on the spot. That’s why we are offering
-free installation and free equipment so you can make an educated decision. Now let’s
-say you’re not convinced fiber is better than copper after the installation there are no
-contracts or cancellation fees.
-Also just some food for thought, for the last 50 year there was only 1 fiber line in the
-state of north Carolina which was in Front Bragg to the US Air Force base Langlie in
-Virginia; and this was a military grade technology which recently came to the
-commercial space where it started off in densily populated city center like New York,
-Boston, and Chicago. Now recently due to Government subsidies and grant fiber optic
-internet is available in rural America. Like I said we want to earn your business that’s
-why there’s free installation and free 30 days of internet service. Like I said a lot of the
-neighbors are getting installed *choose a date that you signed up last customer* would
-that date work for you?
-IF Yes: Then; Put in the order.
-IF No: Then; walk away – rejection immunity. Next door up.
-`;
+Talking to neighbors I’ve found 2 main pain points:  
+1) Introductory rate trap  
+2) Spinning wheel of death while streaming.
 
-export type Playbook = {
-  [key: string]: string;
-};
+I’m assuming you have Spectrum?  
+IF Yes: Then; And how much are you paying?  
+Find pricing, then: what speeds do you get with that? (take an educated guess to show expertise)
 
-export const playbook: Playbook = {	
-  card2: `
-Shared vs. Dedicated Infrastructure
-Spectrum uses shared copper lines that congest during peak hours...
-Analogy: garden hose shared by 5 families (cable) vs. your own water main (fiber).
-Ask: "Notice slowdowns around dinner time?"`,
-  card3: `
-Commercial-Grade Equipment Edge
-$300+ 802.11ax router included free. Enterprise-grade Wi-Fi, solves dead zones.`,
-  card5: `
-Infrastructure Age Comparison
-Copper = 1960s, weathered, degraded. Fiber = glass, waterproof, connects continents.`,
-  card6: `
-Military & Government Credibility
-Trusted by the U.S. military, federal agencies, hospitals since the 1990s.`,
-  card7: `
-Live Speed Test Revelation
-Run a speed test on their phone. Let numbers create the 'aha' moment.`,
-  card8: `
-Upload Speed Game-Changer
-Cable: 100/10. Fiber: symmetrical. Video calls, gaming, cloud = smooth.`,
-  card9: `
-Price Lock Guarantee
-Spectrum intro rates jump 40–60% after 12 months. Fiber = no surprises.`
-};
+Spectrum typical plans:  
+• 100 Mbps: $30 promo → $50–54 regular  
+• 500/600 Mbps Ultra: $50 promo → $82–86 regular  
+• 1 Gig: $70 promo → $94–114 regular  
+
+Ripple typical plans:  
+• 500 Mbps: $50 → $73  
+• 1 Gig: $85 flat  
+• 2 Gig: $105 flat  
+
+**Trial close**:  
+Best part about fiber is that it’s bi-symmetrical (download = upload), and costs less to transmit broadband vs. copper. That means your bill will be lower and your experience on Facebook, Netflix, YouTube will be better.
+
+Neighbors are getting installed on *insert date*. Would that date work for you?
+
+IF Yes: Put in the order.  
+IF No: Reassure them: today is just picking an install date, no contracts, free installation + free equipment + 30 days free. After trying it, if you’re not convinced, cancel with no fees.  
+
+Food for thought: For 50 years there was only 1 fiber line in NC—from Fort Bragg to Langley Air Force Base. Military-only tech, now rolled out to homes thanks to subsidies.  
+
+So, would *insert date* work for you?  
+IF Yes: Put in the order.  
+IF No: Walk away – rejection immunity.`
+  },
+
+  {
+    title: "Card 2: Shared vs. Dedicated Infrastructure",
+    body: `Spectrum cable runs on shared copper lines that get congested during peak hours. Fiber gives each home dedicated bandwidth with consistent speeds.  
+Analogy: “Garden hose shared by five families vs. your own water main.”  
+Ask: “Notice your internet slows at dinner time?”`
+  },
+
+  {
+    title: "Card 3: Commercial-Grade Equipment Edge",
+    body: `Routers with 802.11ax ($300+ retail) included free. Enterprise-grade Wi-Fi for whole-home coverage.  
+Tactics:  
+• Position as future-proof: “This is what offices use.”  
+• Solve dead zone complaints by highlighting this card.  
+• Value stack: “$300 retail router included free.”`
+  },
+
+  {
+    title: "Card 4: Risk-Free Trial Strategy",
+    body: `Remove commitment fear by reframing:  
+“Look, you don’t have to marry us on the first date. Try fiber for 30 days – if you don’t love it, kick us out.”  
+Position yourself as the underdog: “We’re the new guys, so we’ll prove ourselves.”  
+Make ‘No’ harder than ‘Yes’. With zero risk, refusal makes no sense.`
+  },
+
+  {
+    title: "Card 5: Infrastructure Age Comparison",
+    body: `Copper lines: hung on poles since the 1960s. Corroded, storm-damaged, weakened by time. Shared bandwidth = bottlenecks.  
+Fiber: glass tubes, immune to water/weather, consistent performance, built to last decades, dedicated bandwidth.  
+Killer question: “Would you trust 60-year-old copper beaten by storms, or brand-new fiber reliable enough to connect continents under oceans?”`
+  },
+
+  {
+    title: "Card 6: Military & Government Credibility",
+    body: `Fiber = trusted for mission-critical communications since 1990s.  
+• Military: secure, high-speed bases worldwide  
+• Government: backbone for air traffic, emergency services  
+• Healthcare: life-saving telemedicine, instant patient records  
+Pitch: “If the U.S. military has trusted fiber for decades to protect the country, now it’s finally affordable enough for your neighborhood.”`
+  },
+
+  {
+    title: "Card 7: Live Speed Test Revelation",
+    body: `Numbers don’t lie. Run a live speed test on the customer’s phone.  
+Act surprised when they’re underperforming: “Wow, you pay for how much and only get this?”  
+Then contrast with fiber’s consistent, symmetrical speeds.  
+Perfect against: “My internet is fine.”`
+  },
+
+  {
+    title: "Card 8: Upload Speed Game-Changer",
+    body: `Cable = fast downloads, terrible uploads (e.g., 100 Mbps down / 10 Mbps up).  
+Fiber = symmetrical (300 down = 300 up).  
+Why uploads matter:  
+• Zoom/Teams calls  
+• Cloud storage backups  
+• Online gaming latency  
+• Remote work file transfers  
+• Live streaming / video uploads  
+Opener: “Ever freeze on video calls while others look fine? That’s your upload speed failing you.”`
+  },
+
+  {
+    title: "Card 9: Price Lock Guarantee",
+    body: `Spectrum trap: promo rate for 12 months, then 40–60% hikes.  
+Fiber promise: no intro rates, no surprises. Transparent, locked pricing.  
+Position this strongly with cost-conscious customers.`
+  }
+];
