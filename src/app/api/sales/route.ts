@@ -1,12 +1,12 @@
 // src/app/api/sales/route.ts
 import { NextResponse } from "next/server";
-import { pitch, playbook, salesContent } from "@/lib/salesContent";
+import { pitch, playbook } from "@/lib/salesContent";
 
 export async function GET() {
   return NextResponse.json({
     ok: true,
-    count: salesContent.length,
+    count: playbook.length + (pitch ? 1 : 0),
     pitch,
-    playbook
+    playbook,
   });
 }
