@@ -1,25 +1,63 @@
-import { NextRequest, NextResponse } from "next/server";
+// src/app/api/chat/route.ts
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { searchKb } from "@/lib/rag";
+import { salesContent } from "@/lib/salesContent";
 
-const ai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+export const runtime = "edge";
 
-export async function POST(req: NextRequest) {
-  const { question } = await req.json();
-  const chunks = await searchKb(question, 6);
-  const context = chunks.map((c,i)=>`[${i+1}] ${c.title || c.tag} — ${c.body}`).join("\n\n");
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-  const sys = `You are a T-Fiber sales trainer. Use ONLY the CONTEXT facts.
-Answer clearly, then cite like [1], [2]. If info is missing, say what to check.`;
-  const user = `QUESTION:\n${question}\n\nCONTEXT:\n${context}`;
+function buildSystemPrompt() {
+  const { pitch, playbook } = salesContent;
+  const cards = playbook
+    .map((c, i) => `Card ${i + 1} — ${c.title}: ${c.body}`)
+    .join("\n\n");
 
-  const r = await ai.responses.create({
-    model: process.env.OPENAI_MODEL!,
-    input: [{role:"system",content:sys},{role:"user",content:user}]
-  });
+  return `You are the T-Fiber Sales Coach. Be concise and tactical.
 
-  return NextResponse.json({
-    answer: r.output_text,
-    citations: chunks.map((c,i)=>({ref:i+1, title:c.title || c.tag}))
-  });
+--- PITCH ---
+${pitch}
+
+--- TACTICAL CARDS ---
+${cards}
+
+Rules:
+- Keep answers short and action-oriented.
+- Use bullet points for steps or objections.
+- Don’t invent pricing; use positioning.
+- Use shared vs dedicated, upload parity, and peak-hour consistency to beat cable.`;
+}
+
+export async function POST(req: Request) {
+  try {
+    const { message } = await req.json().catch(() => ({}));
+    if (!message || typeof message !== "string") {
+      return NextResponse.json({ error: "Missing 'message' string in body." }, { status: 400 });
+    }
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json({ error: "OPENAI_API_KEY is not set." }, { status: 500 });
+    }
+
+    const system = buildSystemPrompt();
+
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: message },
+      ],
+      temperature: 0.3,
+    });
+
+    const text =
+      completion.choices?.[0]?.message?.content?.trim() ||
+      "Sorry, I couldn’t generate a response.";
+
+    return NextResponse.json({ text });
+  } catch (err: any) {
+    console.error("CHAT_ROUTE_ERROR:", err?.message || err);
+    return NextResponse.json({ error: err?.message || "Unknown server error" }, { status: 500 });
+  }
 }
