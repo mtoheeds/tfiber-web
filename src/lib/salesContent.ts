@@ -121,3 +121,11 @@ Fiber promise: no intro rates, no surprises. Transparent, locked pricing.
 Position this strongly with cost-conscious customers.`
   }
 ];
+// --- Convenience named exports for existing imports ---
+export const pitch =
+  salesContent.find(n => n.title.toLowerCase().includes("door pitch"))?.body ??
+  (salesContent[0]?.body ?? "");
+
+export const playbook = salesContent.filter(
+  n => !n.title.toLowerCase().includes("door pitch")
+);
