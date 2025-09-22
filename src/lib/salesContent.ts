@@ -47,7 +47,7 @@ Best part about fiber is that it’s bi-symmetrical (download = upload), and cos
 Neighbors are getting installed on *insert date*. Would that date work for you?
 
 IF Yes: Put in the order.
-IF No: Reassure them: today is just picking an install date, no contracts, free installation + free equipment + 30 days free. After trying it, if you’re not convinced, cancel with no fees.
+IF No: Reassure them: today is just picking an install date, no contracts, free installation + free equipment. After trying it, if you’re not convinced, cancel with no fees.
 
 Food for thought: For 50 years there was only 1 fiber line in NC—from Fort Bragg to Langley Air Force Base. Military-only tech, now rolled out to homes thanks to subsidies.
 
@@ -75,7 +75,7 @@ Tactics:
   {
     title: "Card 4: Risk-Free Trial Strategy",
     body: `Remove commitment fear by reframing:
-“Look, you don’t have to marry us on the first date. Try fiber for 30 days – if you don’t love it, kick us out.”
+“Look, you don’t have to marry us on the first date. Try fiber for a few weeks – if you don’t love it, kick us out.”
 Position yourself as the underdog: “We’re the new guys, so we’ll prove ourselves.”
 Make ‘No’ harder than ‘Yes’. With zero risk, refusal makes no sense.`
   },
@@ -107,7 +107,7 @@ Perfect against: “My internet is fine.”`
   {
     title: "Card 8: Upload Speed Game-Changer",
     body: `Cable = fast downloads, terrible uploads (e.g., 100 down / 10 up).
-Fiber = symmetrical (300 down = 300 up).
+Fiber = symmetrical (2000 down = 2000 up).
 Why uploads matter:
 • Zoom/Teams calls
 • Cloud backups
