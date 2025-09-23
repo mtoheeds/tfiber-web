@@ -27,18 +27,11 @@ export default function VoiceAgent({
       if (state !== "idle") return;
       setHint("Listening… release to send");
 
-      // Ask for the mic
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
       const mr = new MediaRecorder(stream, { mimeType: "audio/webm" });
       chunksRef.current = [];
-
-      mr.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
-      };
-
+      mr.ondataavailable = (e) => { if (e.data && e.data.size > 0) chunksRef.current.push(e.data); };
       mr.onstop = handleStop;
-
       mediaRecorderRef.current = mr;
       mr.start();
       setState("recording");
@@ -50,32 +43,19 @@ export default function VoiceAgent({
 
   async function handleStop() {
     try {
-      if (!chunksRef.current.length) {
-        setState("idle");
-        setHint("Hold mic to talk");
-        return;
-      }
-
-      setState("thinking");
-      setHint("Transcribing…");
+      if (!chunksRef.current.length) { setState("idle"); setHint("Hold mic to talk"); return; }
+      setState("thinking"); setHint("Transcribing…");
 
       const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-
-      // 1) Speech-to-text
       const form = new FormData();
       form.append("audio", blob, "voice.webm");
+
       const sttRes = await fetch("/api/stt", { method: "POST", body: form });
       const stt = await sttRes.json();
-
       const userText = (stt?.text || "").trim();
-      if (!userText) {
-        setState("idle");
-        setHint("No speech detected — hold to try again");
-        return;
-      }
+      if (!userText) { setState("idle"); setHint("No speech detected — hold to try again"); return; }
       onTranscript?.(userText);
 
-      // 2) Chat answer
       setHint("Thinking…");
       const chatRes = await fetch("/api/chat", {
         method: "POST",
@@ -86,19 +66,13 @@ export default function VoiceAgent({
       const answer = (chat?.text || "").trim();
       onAssistantText?.(answer);
 
-      // 3) Text-to-speech
       setHint("Speaking…");
       const ttsRes = await fetch("/api/tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: answer, voice: "alloy", format: "mp3" }),
       });
-
-      if (!ttsRes.ok) {
-        setState("idle");
-        setHint("TTS failed — check API key / model");
-        return;
-      }
+      if (!ttsRes.ok) { setState("idle"); setHint("TTS failed — check API key / model"); return; }
 
       const buf = await ttsRes.arrayBuffer();
       const url = URL.createObjectURL(new Blob([buf], { type: "audio/mp3" }));
@@ -106,14 +80,10 @@ export default function VoiceAgent({
       if (audioRef.current) {
         setState("speaking");
         audioRef.current.src = url;
-        audioRef.current.onended = () => {
-          setState("idle");
-          setHint("Hold mic to talk");
-        };
+        audioRef.current.onended = () => { setState("idle"); setHint("Hold mic to talk"); };
         await audioRef.current.play();
       } else {
-        setState("idle");
-        setHint("Hold mic to talk");
+        setState("idle"); setHint("Hold mic to talk");
       }
     } catch (err: any) {
       setState("error");
@@ -124,37 +94,28 @@ export default function VoiceAgent({
   function stopRecording() {
     if (mediaRecorderRef.current && state === "recording") {
       mediaRecorderRef.current.stop();
-      // stop all tracks to release the mic
       mediaRecorderRef.current.stream.getTracks().forEach((t) => t.stop());
     }
   }
 
-  const isIdle = state === "idle";
   const isRec = state === "recording";
-  const isThinking = state === "thinking";
-  const isSpeaking = state === "speaking";
-  const isError = state === "error";
+  const label =
+    state === "recording" ? "Listening… release to send" :
+    state === "thinking"  ? "Thinking…" :
+    state === "speaking"  ? "Speaking…" :
+    state === "error"     ? `Error: ${hint}` :
+                            hint;
 
   return (
     <div className="flex items-center justify-between px-4 py-3">
-      {/* Instruction text */}
-      <div className="text-sm text-neutral-400">
-        {isRec && "Listening… release to send"}
-        {isThinking && "Thinking…"}
-        {isSpeaking && "Speaking…"}
-        {isError && `Error: ${hint}`}
-        {isIdle && hint}
-      </div>
-
-      {/* Hold-to-talk button */}
+      <div className="text-sm text-neutral-400">{label}</div>
       <button
         onMouseDown={startRecording}
         onMouseUp={stopRecording}
         onTouchStart={startRecording}
         onTouchEnd={stopRecording}
-        className={`h-11 w-11 shrink-0 rounded-full grid place-items-center transition
-          ${isRec ? "bg-red-500 text-white" : "bg-zinc-900 text-white hover:bg-zinc-800"}
-        `}
+        className={`h-11 w-11 rounded-full grid place-items-center transition
+          ${isRec ? "bg-red-500 text-white" : "bg-zinc-900 text-white hover:bg-zinc-800"}`}
         title={isRec ? "Release to send" : "Hold to talk"}
       >
         {isRec ? "●" : "🎤"}

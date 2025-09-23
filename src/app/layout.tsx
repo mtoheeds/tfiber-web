@@ -1,21 +1,19 @@
+// src/app/layout.tsx
 import "./globals.css";
 import { Inter } from "next/font/google";
+import type { Metadata } from "next";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-app",
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "T-Fiber Sales Trainer",
-  description: "ChatGPT-style trainer with voice.",
+  description: "Coach for door-to-door reps with chat + voice.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-[#0b0b0b] text-gray-100">{children}</body>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

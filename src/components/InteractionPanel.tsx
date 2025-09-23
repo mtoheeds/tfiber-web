@@ -4,6 +4,7 @@
 import dynamic from "next/dynamic";
 import ChatBox from "@/components/ChatBox";
 
+// ✅ Dynamic import with ssr:false is OK here because this is a CLIENT component
 const VoiceAgent = dynamic(() => import("@/components/VoiceAgent"), { ssr: false });
 
 export default function InteractionPanel() {
