@@ -2,25 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Simple voice loop with:
- * - Recognition (Chrome/Edge: webkitSpeechRecognition)
- * - Speech synthesis for assistant replies
- * - Hands-free loop: listen -> send -> speak -> listen
- */
 export function useVoice() {
   const [supported, setSupported] = useState(false);
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const recogRef = useRef<any>(null);
+  const recog = useRef<any>(null);
 
-  // init recognition
   useEffect(() => {
     const SR: any =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) return setSupported(false);
-
     const r = new SR();
     r.lang = "en-US";
     r.interimResults = true;
@@ -35,25 +27,25 @@ export function useVoice() {
     r.onend = () => setListening(false);
     r.onerror = () => setListening(false);
 
-    recogRef.current = r;
+    recog.current = r;
     setSupported(true);
   }, []);
 
   function startOnce() {
-    if (recogRef.current && !listening) {
+    if (recog.current && !listening) {
       setTranscript("");
-      recogRef.current.start();
+      recog.current.start();
     }
   }
-  function stop() {
-    if (recogRef.current && listening) recogRef.current.stop();
+  function stopListen() {
+    if (recog.current && listening) recog.current.stop();
   }
 
   function speak(text: string, onEnd?: () => void) {
     if (!("speechSynthesis" in window)) return onEnd?.();
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1; // tweak if you want
+    u.rate = 1;
     u.pitch = 1;
     u.onstart = () => setSpeaking(true);
     u.onend = () => {
@@ -62,7 +54,7 @@ export function useVoice() {
     };
     window.speechSynthesis.speak(u);
   }
-  function stopSpeaking() {
+  function stopSpeak() {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       setSpeaking(false);
@@ -76,8 +68,8 @@ export function useVoice() {
     transcript,
     setTranscript,
     startOnce,
-    stop,
+    stopListen,
     speak,
-    stopSpeaking,
+    stopSpeak,
   };
 }
