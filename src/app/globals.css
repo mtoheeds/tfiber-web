@@ -2,20 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---- App base styles (safe for Turbopack) ---- */
-:root {
-  color-scheme: dark;
-}
+/* Safe base styles (no globs here!) */
+:root { color-scheme: dark; }
 
-html, body, #__next {
-  height: 100%;
-}
+html, body, #__next { height: 100%; }
 
 body {
-  background: #0b0c10; /* deep charcoal */
-  color: #e5e7eb;      /* gray-200 */
+  background: #0b0c10;
+  color: #e5e7eb;
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
-/* Optional scrollbar smoothing */
 * { scrollbar-width: thin; }
