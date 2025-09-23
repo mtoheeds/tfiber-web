@@ -6,7 +6,6 @@ import { useVoice } from "./useVoice";
 type Msg = { role: "user" | "assistant"; content: string };
 
 function ActionRow() {
-  // Visual-only row of icons under assistant messages
   return (
     <div className="flex gap-4 text-gray-400 text-[15px] pt-2">
       <button title="Copy">📋</button>
@@ -46,7 +45,7 @@ export default function ChatMobile() {
   const endRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, loading]);
 
-  // voice
+  // Voice
   const {
     supported,
     listening,
@@ -58,8 +57,8 @@ export default function ChatMobile() {
     speak,
     stopSpeak,
   } = useVoice();
-  const [voiceOpen, setVoiceOpen] = useState(false); // bottom bubble state
-  const [handsFree, setHandsFree] = useState(true);  // behave like ChatGPT voice
+  const [voiceOpen, setVoiceOpen] = useState(false);
+  const [handsFree, setHandsFree] = useState(true);
 
   function openVoice() {
     setVoiceOpen(true);
@@ -92,7 +91,6 @@ export default function ChatMobile() {
       const text = data?.text || "Sorry, I couldn’t generate a response.";
       setMessages((m) => [...m, { role: "assistant", content: text }]);
 
-      // if voice panel open, speak reply then resume listening (hands-free loop)
       if (voiceOpen && supported) {
         speak(text, () => {
           if (handsFree) startOnce();
@@ -105,7 +103,6 @@ export default function ChatMobile() {
     }
   }
 
-  // When user finishes speaking, we get a transcript. Send it.
   useEffect(() => {
     if (!voiceOpen) return;
     if (!listening && !speaking && transcript) {
@@ -120,7 +117,7 @@ export default function ChatMobile() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
-          <button title="Back" className="text-gray-300">≡</button>
+          <button title="Menu" className="text-gray-300">≡</button>
           <span className="font-semibold">ChatGPT 5</span>
         </div>
         <button title="New" className="text-gray-300">✎</button>
@@ -131,16 +128,13 @@ export default function ChatMobile() {
         {messages.map((m, i) => (
           <Bubble key={i} m={m} />
         ))}
-        {loading && (
-          <div className="px-4 text-gray-400">…</div>
-        )}
+        {loading && <div className="px-4 text-gray-400">…</div>}
         <div ref={endRef} />
       </main>
 
-      {/* Composer row */}
+      {/* Composer */}
       <div className="px-3 pb-4">
         <div className="flex items-center gap-2">
-          {/* + button */}
           <button
             className="h-10 w-10 rounded-full bg-[#1a1a1a] text-gray-200 grid place-items-center text-xl"
             title="More"
@@ -148,7 +142,6 @@ export default function ChatMobile() {
             +
           </button>
 
-          {/* Input pill */}
           <input
             className="flex-1 h-12 rounded-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 px-4 focus:outline-none"
             placeholder="Ask anything"
@@ -162,7 +155,6 @@ export default function ChatMobile() {
             }}
           />
 
-          {/* Mic button */}
           <button
             onClick={() => (supported ? openVoice() : alert("Voice not supported in this browser"))}
             className={`h-10 w-10 rounded-full grid place-items-center text-xl ${
@@ -175,72 +167,43 @@ export default function ChatMobile() {
         </div>
       </div>
 
-      {/* Voice bubble (bottom sheet style) */}
+      {/* Voice bubble */}
       {voiceOpen && (
         <div className="fixed inset-0 z-50 pointer-events-none">
-          {/* dim backdrop */}
           <div className="absolute inset-0 bg-black/40" />
-
-          {/* bubble */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[92%] max-w-md pointer-events-auto">
             <div className="rounded-3xl bg-[#111111] border border-white/10 p-4 shadow-2xl">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-300">
                   {listening ? "Listening…" : speaking ? "Speaking…" : "Ready"}
                 </div>
-                <button
-                  onClick={closeVoice}
-                  className="text-gray-300 hover:text-white text-sm"
-                  title="Close"
-                >
-                  ✕
-                </button>
+                <button onClick={closeVoice} className="text-gray-300 hover:text-white text-sm" title="Close">✕</button>
               </div>
 
-              {/* pulsing ring */}
               <div className="py-4 flex items-center gap-3">
                 <div className="relative h-10 w-10">
-                  <span
-                    className={`absolute inset-0 rounded-full ${
-                      listening ? "animate-ping bg-emerald-500/40" : "bg-transparent"
-                    }`}
-                  />
-                  <div className="relative h-10 w-10 rounded-full grid place-items-center bg-[#1f1f1f]">
-                    🎤
-                  </div>
+                  <span className={`absolute inset-0 rounded-full ${listening ? "animate-ping bg-emerald-500/40" : "bg-transparent"}`} />
+                  <div className="relative h-10 w-10 rounded-full grid place-items-center bg-[#1f1f1f]">🎤</div>
                 </div>
-
                 <div className="flex-1 text-gray-200 text-sm min-h-[2.25rem]">
                   {transcript || (speaking ? "Playing assistant reply…" : "Say something…")}
                 </div>
               </div>
 
-              {/* controls */}
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 text-xs text-gray-400">
-                  <input
-                    type="checkbox"
-                    checked={handsFree}
-                    onChange={() => setHandsFree((v) => !v)}
-                  />
+                  <input type="checkbox" checked={handsFree} onChange={() => setHandsFree((v) => !v)} />
                   Hands-free
                 </label>
-
                 <div className="flex gap-2">
                   <button
-                    onClick={() => {
-                      stopSpeak();
-                      startOnce();
-                    }}
+                    onClick={() => { stopSpeak(); startOnce(); }}
                     className="px-3 py-1.5 rounded-full bg-[#1a1a1a] text-gray-200 text-sm"
                   >
                     Listen
                   </button>
                   <button
-                    onClick={() => {
-                      stopListen();
-                      stopSpeak();
-                    }}
+                    onClick={() => { stopListen(); stopSpeak(); }}
                     className="px-3 py-1.5 rounded-full bg-rose-600 text-white text-sm"
                   >
                     Stop
